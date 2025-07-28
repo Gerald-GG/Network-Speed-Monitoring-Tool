@@ -15,6 +15,13 @@ def run_speedtest():
         print(f"[!] Error running speedtest: {e}")
         return None
 
+def get_ssid():
+    try:
+        result = subprocess.run(['iwgetid', '-r'], capture_output=True, text=True, check=True)
+        return result.stdout.strip()
+    except subprocess.CalledProcessError:
+        return "N/A"  # For Ethernet or error
+
 def parse_and_log(json_data):
     data = json.loads(json_data)
 
@@ -24,8 +31,9 @@ def parse_and_log(json_data):
     upload = round(data['upload']['bandwidth'] / 125000, 2)
     isp = data['isp']
     server = data['server']['name']
+    ssid = get_ssid()
 
-    # Format for display and formatted log
+    # Format for display and log
     formatted_output = [
         f"📅 Date & Time: {timestamp}",
         f"📡 Ping: {ping} ms",
@@ -33,9 +41,10 @@ def parse_and_log(json_data):
         f"⬆️ Upload Speed: {upload} Mbps",
         f"🏢 ISP: {isp}",
         f"🌐 Server: {server}",
+        f"📶 SSID: {ssid}",
     ]
 
-    # Save formatted to display log
+    # Save formatted to log
     with open(LOG_FILE, 'a', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(["📊 Network Speed Test Result"])
@@ -43,13 +52,13 @@ def parse_and_log(json_data):
             writer.writerow([line])
         writer.writerow([])
 
-    # Save raw values for graphing
+    # Save raw values
     file_exists = os.path.isfile(RAW_DATA_FILE)
     with open(RAW_DATA_FILE, 'a', newline='') as f:
         writer = csv.writer(f)
         if not file_exists:
-            writer.writerow(['timestamp', 'ping_ms', 'download_mbps', 'upload_mbps', 'isp', 'server'])
-        writer.writerow([timestamp, ping, download, upload, isp, server])
+            writer.writerow(['timestamp', 'ping_ms', 'download_mbps', 'upload_mbps', 'isp', 'server', 'ssid'])
+        writer.writerow([timestamp, ping, download, upload, isp, server, ssid])
 
     # Print to terminal
     print("\n📊 Network Speed Test Result")

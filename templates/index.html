@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>📶 Network Speed Dashboard</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    img {
+      width: 90%;
+      max-width: 1000px;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <h1>📊 Network Speed Graph</h1>
+  <p>Latest scan plotted from <code>raw_data.csv</code></p>
+  <img src="/graph?{{ timestamp }}" alt="Speed Graph">
+  <br><br>
+  <button onclick="window.location.reload();">🔁 Refresh</button>
+</body>
+</html>
