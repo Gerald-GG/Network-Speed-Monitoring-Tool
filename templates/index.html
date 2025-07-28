@@ -24,6 +24,19 @@
       color: white;
       border-radius: 6px;
     }
+    table {
+      margin: 30px auto;
+      border-collapse: collapse;
+      width: 90%;
+      max-width: 1000px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
   </style>
 </head>
 <body>
@@ -35,5 +48,35 @@
     <button type="submit">🚀 Run New Scan</button>
   </form>
   <button onclick="window.location.reload();">🔁 Refresh</button>
+
+  {% if data %}
+  <h2>🕒 Recent Speed Test Results</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Timestamp</th>
+        <th>Ping (ms)</th>
+        <th>Download (Mbps)</th>
+        <th>Upload (Mbps)</th>
+        <th>ISP</th>
+        <th>Server</th>
+        <th>SSID</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in data %}
+      <tr>
+        <td>{{ row['timestamp'] }}</td>
+        <td>{{ row['ping'] }}</td>
+        <td>{{ row['download'] }}</td>
+        <td>{{ row['upload'] }}</td>
+        <td>{{ row['isp'] }}</td>
+        <td>{{ row['server'] }}</td>
+        <td>{{ row['ssid'] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
 </body>
 </html>
