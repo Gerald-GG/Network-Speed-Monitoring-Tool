@@ -14,6 +14,16 @@
       border: 1px solid #ccc;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
+    button {
+      padding: 12px 20px;
+      margin: 15px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      background-color: #28a745;
+      color: white;
+      border-radius: 6px;
+    }
   </style>
 </head>
 <body>
@@ -21,6 +31,9 @@
   <p>Latest scan plotted from <code>raw_data.csv</code></p>
   <img src="/graph?{{ timestamp }}" alt="Speed Graph">
   <br><br>
+  <form action="/run-scan" method="get">
+    <button type="submit">🚀 Run New Scan</button>
+  </form>
   <button onclick="window.location.reload();">🔁 Refresh</button>
 </body>
 </html>
