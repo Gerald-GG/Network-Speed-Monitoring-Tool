@@ -1,6 +1,5 @@
 import subprocess
 import csv
-import datetime
 import json
 
 def run_speedtest():
@@ -15,26 +14,35 @@ def parse_and_log(json_data, log_file='logs/speedtest_log.csv'):
     data = json.loads(json_data)
 
     timestamp = data['timestamp']
-    ping = data['ping']['latency']
-    download = data['download']['bandwidth'] / 125000  # Convert to Mbps
-    upload = data['upload']['bandwidth'] / 125000      # Convert to Mbps
+    ping = round(data['ping']['latency'], 2)
+    download = round(data['download']['bandwidth'] / 125000, 2)  # Convert to Mbps
+    upload = round(data['upload']['bandwidth'] / 125000, 2)      # Convert to Mbps
     isp = data['isp']
     server = data['server']['name']
 
-    # Log to CSV
-    row = [timestamp, round(ping, 2), round(download, 2), round(upload, 2), isp, server]
+    # Prepare formatted strings
+    formatted_output = [
+        f"📅 Date & Time: {timestamp}",
+        f"📡 Ping: {ping} ms",
+        f"⬇️ Download Speed: {download} Mbps",
+        f"⬆️ Upload Speed: {upload} Mbps",
+        f"🏢 ISP: {isp}",
+        f"🌐 Server: {server}",
+    ]
+
+    # Save to CSV as one cell per line
     with open(log_file, 'a', newline='') as f:
         writer = csv.writer(f)
-        writer.writerow(row)
+        writer.writerow(["📊 Network Speed Test Result"])
+        for line in formatted_output:
+            writer.writerow([line])
+        writer.writerow([])  # Add a blank line between entries
 
-    # Print formatted result
+    # Print formatted output
     print("\n📊 Network Speed Test Result")
-    print(f"📅 Date & Time: {timestamp}")
-    print(f"📡 Ping: {round(ping, 2)} ms")
-    print(f"⬇️ Download Speed: {round(download, 2)} Mbps")
-    print(f"⬆️ Upload Speed: {round(upload, 2)} Mbps")
-    print(f"🏢 ISP: {isp}")
-    print(f"🌐 Server: {server}\n")
+    for line in formatted_output:
+        print(line)
+    print()
 
 def main():
     print("[*] Running network speed test...")
